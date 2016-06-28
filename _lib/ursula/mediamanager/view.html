@@ -1,0 +1,199 @@
+{% load thumbnail %}
+{% load pagination_tags %}
+{% autopaginate files 10 %}
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head id="Head1" runat="server">
+<title>Media Browser</title>
+<script type="text/javascript" src="/_lib/jquery_1_3_2/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="/_lib/jquery_plugins/fancybox_1_2_1/jquery.fancybox-1.2.1.pack.js"></script>
+<script type="text/javascript" src="/_lib/tinymce_3_2_5_jquery/tinymce/jscripts/tiny_mce/tiny_mce_popup.js"></script>
+<link rel="stylesheet" type="text/css" href="/_lib/css/jquery_fancybox_1_2_1/jquery.fancybox.css" />
+
+
+<link rel="stylesheet" href="/_lib/css/mediamanager/screen.css" type="text/css" media="screen" />
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<script type="text/javascript">
+    function doFilterFromUpload(searchPattern) {
+        // $.post(window.location, { folderSearch: searchPattern });
+        $("#folderSearch").val(searchPattern);
+        $("#folderSearchForm").submit();
+    }
+
+    $(document).ready(function() {
+
+        // SHOW New Folder Popup
+        $("a#createNewFolder").click(function() {
+        	$("#id_dir").val('');
+            $("#newFolderPop").fadeIn('300', function() {
+            	$("#id_dir").focus();
+            });
+            return false;
+        });
+
+        // HIDE New Folder Popup
+        // and clear form field
+        $("a#newFolderPopClose").click(function() {
+            $("#newKey").blur();
+            $("#id_dir").val('');
+            $("#newFolderPop").fadeOut('100');
+            return false;
+        });
+
+    });
+
+
+    // SUBMIT New Folder
+    function newFolderSubmit() {
+		var path = "";
+	{% if prefix %}
+       	var path = "{{ prefix }}{{ dir }}/";
+  	{% endif %}
+    	var dir = $("#id_dir").val();
+		path = path + dir;
+        
+        $("#newFolderFormArea").fadeOut('100');
+        $("#newFolderAjaxLoading").fadeIn('100');
+
+        $.post("/mm/add-dir", { path: path },
+            function(data) {
+            	window.location.reload();
+	        }
+         );
+        
+        return false;
+    }
+
+
+ // Add to Editor -- pressed from viewing thumbnails
+    function selectImage(imgPath, edId) {
+        tinyMCEPopup.execCommand('mceInsertContent', false, '<img src="' + imgPath + '" alt="" />');
+        window.close();
+
+    }
+
+    // Add to Page -- pressed from viewing thumbnails
+    function selectSingleImage(imgPath) {
+        window.opener.postSingleImage(imgPath);
+        window.close();
+    }
+
+    function uploadFile() {
+        contentWidth = 400;
+        contentHeight = 400;
+        url = "/mm/upload?prefix={{ prefix }}";
+        var x = (screen.width) ? ( screen.width - contentWidth ) / 2 : 0;
+    	var y = (screen.height) ? ( screen.height - contentHeight ) / 2 : 0;
+    	var settings = 'height=' + contentHeight + ',width=' + contentWidth + ',top='+y+',left='+x+',resizable=no,status=no,menubar=no,scrollbars=no';
+    	//myWin = window.open(fileURL,windowName,settings); changed to use "_blank" and launch new windows each time
+    	myWin = window.open(url,"_blank",settings);
+
+
+    }
+
+</script>
+</head>
+<body>
+<div id="header"><h2>DizCollect Media Manager</h2></div>
+<div id="path">Path: <strong>{{ media_url }}</strong></div>
+<div id="funcMenu">
+    <a href="#" id="createNewFolder">Create New Folder</a>&nbsp;|&nbsp; 
+    <a href="#" onclick='uploadFile()' id="uploadFile">Upload New Files</a>
+    <div id="newFolderPop">
+        <div id="newFolderAjaxLoading" class="ajaxLoader" style="display:none; text-align:center; top:10px; left:0px; width:100%; padding-top:38px;">
+        Creating...
+        </div>
+        <div id="newFolderFormArea">
+            <strong>Enter name of new folder:</strong><br />
+            <form id="newFolderForm" method="post" action="" onSubmit="return newFolderSubmit()">
+                <input type="text" name="dir" id="id_dir" style="width:200px;" /> &nbsp;<input type="submit" name="submit" value="Create" /><br />
+                <div style="position:absolute; top:5px; left:295px;"><small><a href="#" id="newFolderPopClose">[x] close</a></small></div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<br />
+<table border="0" cellpadding="0" cellspacing="0" style="background:#fff; height:100%">
+<tr>
+    <td align="left" valign="top">
+    <form id="folderSearchForm" name="folderSearchForm" method="post">
+    <strong>Filter this folder:</strong>
+    <input type="text" class="text" name="folderSearch" id="folderSearch" value="" style="width:150px;" /><br />
+    </form>
+    <br />
+    <hr />
+    <br />
+    <div id="mediaFolders">
+    <div style="padding:10px 10px 10px; background:#eee; font-weight:bold; font-size:14px;">Folders</div>
+   {% if prefix %}
+        <div class="folderLink" onclick="window.location='/mm/?prefix={{ up_prefix }}'">.. Up</div><br />
+   {% endif %}
+        {% for dir in directories %}
+        {% if request.REQUEST.single %}
+        	<div class="folderLink" onclick="window.location='/mm/?prefix={{ prefix }}/{{ dir }}&single=true'; return false;">{{ dir }}</div>
+        {% else %}
+        	<div class="folderLink" onclick="window.location='/mm/?prefix={{ prefix }}/{{ dir }}'; return false;">{{ dir }}</div>
+        {% endif %}
+    	{% endfor %}
+</div>
+    <br class="clearAll" />
+	</td>
+	<td align="left" valign="top" width="100%" style="padding-left:15px;">
+    {% paginate %}  <br />
+    {% if file_pattern %}   
+        <div style="background:#ccc; padding:5px; border:#999 1px solid; width:99%;"><a href="{{ request.REQUEST.url }}" style="font-size:9px;">[ Remove Filter ]</a><br /><br /><strong>Search Filter: </strong>{{ file_pattern }}</div>
+        <br />
+	{% endif %}
+   		<table border="0" cellpadding="0" cellspacing="0" width="100%">
+		<tr>
+		{% for file in files %}
+		{% if forloop.counter0|divisibleby:"3" %}</tr><tr>{% endif %}
+		<td align="left" valign="top" class="imagesImgTd">
+		{% thumbnail file.file_path 100x100 as thumb %}
+			<div style="float:left; width:100px; height:100px"><img src="{{ thumb.absolute_url }}" width="100" height="100" alt="" /></div>
+			<div class="imagesImgInfo">
+				<div style="height:68px;">
+		        	<strong>{{ file.name }}</strong><br />
+		            <strong>Size: {{ thumb.filesize|filesize:"auto1000long" }}
+				</div>
+				<div style="line-height:18px;">
+			    	<a id="single_image_{{ forloop.counter0 }}" href="{{ media_url }}/{{ file.name }}">View Image</a><br />
+			        {% if request.REQUEST.single %}
+				        <a href="#" onclick="selectSingleImage('{{ prefix }}/{{ file.name }}'); return false;">Select Image</a>
+					{% else %}
+			        	<a href="#" onclick="selectImage('{{ prefix }}/{{ file.name }}', '{{ edit_id }}'); return false;">Select Image</a>
+			        {% endif %}
+				</div>
+		    </div>
+		        
+	        <script type="text/javascript">
+	            // set full image view
+	            $("a#single_image_{{ forloop.counter0 }}").fancybox({ overlayOpacity: 0.8 });
+	        </script>
+		</td>
+		{% endfor %}
+		</tr>
+		</table>
+	
+	
+	
+	<br /><br class="clearAll />
+	<div align="center">
+    {% paginate %}   
+    </div>
+	</td>
+</tr>
+</table>
+<br />
+	
+</div>
+<br />
+</body>
+</html>
+
+
