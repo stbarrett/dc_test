@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% load pagination_tags %}
+
+<h2>People</h2>
+
+{% autopaginate person_list %}
+
+{% for person in person_list %}
+{% if person.last_name %}
+	<a href="{{ person.slug }}">{{ person.last_name }}, {{ person.first_name }}</a>
+{% else %}
+<a href="{{ person.slug }}">{{ person.first_name }}</a>
+{% endif %}
+<br /><br />
+
+{% endfor %}
+
+{% paginate %}
+
+{% endblock %}

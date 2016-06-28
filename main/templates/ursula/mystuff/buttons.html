@@ -1,0 +1,22 @@
+<ul class="my-item-btns">
+	{% ifequal type "collectibles" %}
+		<li><div class="button-sml-disabled">My Collectibles</div></li>
+	{% else %}
+		<li><a href="/mystuff/collectibles/" class="button-sml">My Collectibles</a></li>
+	{% endifequal %}
+	{% ifequal type "books" %}
+		<li><div class="button-sml-disabled">My Books</div></li>
+	{% else %}
+		<li><a href="/mystuff/books/" class="button-sml">My Books</a></li>
+	{% endifequal %}
+	{% if request.user.facebook_profile.id %} {% else %}
+	<li style="float:right; border-left:#000 1px solid; padding-left:22px; padding-right:18px;"><a href="/member/password/change" class="button-sml">Change Password</a></li>
+	{% endif %}
+	{% ifequal type "wishlist" %}
+		<li style="float:right; padding-right:18px;"><div class="button-sml-disabled">My Wish List</div></li>
+	{% else %}
+		<li style="float:right; padding-right:18px;"><a href="/mystuff/wishlist" class="button-sml">My Wish List</a></li>
+	{% endifequal %}
+</ul>
+<br class="clear" />
+<div class="hr-full"></div>

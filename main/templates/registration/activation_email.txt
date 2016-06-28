@@ -1,0 +1,8 @@
+Please Activate your account at DizCollect.com by clicking the link below. 
+
+http://www.dizcollect.com{% url registration_activate activation_key %}
+
+Link is valid for {{ expiration_days }} days.
+
+Thank You,
+DizCollect.com

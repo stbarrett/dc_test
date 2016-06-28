@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}{{ item.title|striptags }} | Disney Book{% endblock %}
+{% load thumbnail %}
+{% load format %}
+{% load items %}
+{% block meta_description %}{% truncate stripped_content 150 %}{% endblock %}
+{% block content %}
+<div id="breadcrumb"> 
+	<a href="/">Home</a>&nbsp;&nbsp;&#187;&nbsp;&nbsp;<a href="/books/">Books</a>&nbsp;&nbsp;&#187;&nbsp;&nbsp;Book
+</div> 
+
+<div class="hr-full"></div>
+<div id="content-left"> 
+	<div style="height:330px; width:350px;">
+	<div id="item-image"> 
+		<div class="image rounded">
+	{% if item.image %}
+		<img src="{% amazon_img_resize item.image 340 %}" alt="{{ item.title }}" class="rounded" /><br />
+	{% else %}
+		<img src="{{ MEDIA_URL }}img/missing_340x300.png" alt="{{ item.title }}" width="340" height="300" />
+	{% endif %} 
+		</div>
+	</div>
+	</div>
+
+</div> 
+<!-- Start content-right --> 
+<div id="content-right"> 
+	<div id="item"> 
+	<div id="item-top" class="rounded">
+		<h1>{{ item.title }}</h1>
+		{% include "ursula/includes/add-wishlist-share.html" %}		
+		</div>
+		<br class="clear" /> 
+		<div class="rounded item-content">
+			{% if authors %}
+			<div class="meta-left">By:</div>
+				<div class="meta-right">
+					{% for author in authors %}
+						{% comment %}<a href="/people/{{ author.slug }}">{% endcomment %}{{ author.name }}{% comment %}</a>{% endcomment %}
+					{% if not forloop.last %}, {% endif %}
+					{% endfor %}
+					{% for creator in creators %}
+						{% if forloop.first %}<br />{% endif %}
+						{% comment %}<a href="/people/{{ creator.slug }}">{% endcomment %}{{ creator.name }}{% if creator.role %} ({{ creator.role }}){% endif %}{% comment %}</a>{% endcomment %}
+					{% if not forloop.last %}, {% endif %}
+					{% endfor %}
+				</div>
+			{% endif %}
+			{% if book.publication_date %}<div class="meta-left">Pub. Date:</div><div class="meta-right">{{ book.publication_date|date:"F d , Y" }}</div>{% endif %}
+			{% if publisher.name %}<div class="meta-left">Publisher:</div><div class="meta-right">{% comment %}<a href="/books/publishers/{{ publisher.slug }}">{% endcomment %}{{ publisher.name }}{% comment %}</a>{% endcomment %}{% if book.edition %}; {{ book.edition }}{% endif %}</div>{% endif %}
+			{% if book.pages %}<div class="meta-left">Pages:</div><div class="meta-right">{{ book.pages }}</div>{% endif %}
+			{% if book.ISBN %}<div class="meta-left">ISBN:</div><div class="meta-right">{{ book.ISBN }}</div>{% endif %}
+			{% if item.tag_list_set.all %}<div class="meta-left">Tags:</div><div class="meta-right">{% for tag in item.tag_list_set.all %}{% comment %}<a href="/collectibles/pins/?tag={{tag.tag.id}}">{% endcomment %}{{tag.tag.name}}{% comment %}</a>{% endcomment %}{% if not forloop.last %}, {% endif %}{% endfor %}</div> {% endif %}
+			
+			{% if book.sale_price %}
+				{% ifnotequal book.list_price book.sale_price %}<div class="meta-left">List Price:</div><div class="meta-right"><strike>{{ book.list_price }}</strike></div>{% endifnotequal %}
+				{% if book.sale_price %}<div class="meta-left">Price:</div><div class="meta-right book-sale-price">{{ book.sale_price }}</div>{% endif %}
+				{% if book.amount_saved %}<div class="meta-left">You Save:</div><div class="meta-right">{{ book.amount_saved }} ({{ book.percentage_saved }} %)</div>{% endif %}
+			{% else %}
+				<div class="meta-left">List Price:</div><div class="meta-right">See Amazon For Price Details</div>
+			{% endif %}
+			<div class="floatLeft"><a href="http://www.amazon.com/exec/obidos/ASIN/{{ item.asin }}/{{ AFFILIATE_ID }}/" target="_blank"><img src="{{ MEDIA_URL }}img/{% if preorder %}pre{% endif %}order_amazon.png" alt="Order From Amazon.com" border="0" /></a></div>
+		</div>
+		
+		<div class="rounded item-content">
+		<h3>Product Description</h3>
+		<div class="hr-full"></div>
+			<p>{% sanitize_html book.description %}</p>
+			{% if book.editorial_reviews %}
+				{% for review in book.editorial_reviews %}
+					<h2>{{ review.source }}</h2>
+					<p>{% sanitize_html review.content %}</p>
+				{% endfor %}
+			{% endif %}
+		</div> 
+{% include "ursula/includes/comments/comments_items.html" %}
+	</div> 
+	
+</div> 
+<!-- End content-right -->		
+
+{% endblock %}

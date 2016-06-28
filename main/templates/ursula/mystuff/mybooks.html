@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}DizCollect: My Collectibles{% endblock %}
+{% load thumbnail %}
+{% load format %}
+{% load items %}
+
+{% block content %}
+{% load pagination_tags %}
+{% autopaginate items 35 %}
+
+<div id="message" class="rounded">
+<img src="{{MEDIA_URL}}img/warning_32.png" alt="" style="float:left;" /><div class="msg"><span class="txt">{{ message }}</span></div>
+</div>
+{% if message %}
+<script type="text/javascript">
+$(document).ready(function() {
+	$("#message").slideDown({ 
+		duration: 500, easing: "easeOutBack"
+	}).animate( { backgroundColor: 'white' }, 500);
+	
+});
+
+</script>
+{% endif %}
+
+<!-- Start content-full --> 
+<div id="content-full" class="rounded"> 
+{% include "ursula/mystuff/buttons.html" %}
+
+<h3>My Books</h3> 
+
+<ul class="item-list item-list-meta item-list-search item-list-my2">
+{% for item in items %}
+	<li{% if forloop.first %} class="first"{% endif %}{% if forloop.counter|divisibleby:"7" %} class="last"{% endif %}{% if forloop.counter|divisibleby:"8" %} class="first"{% endif %}>
+		<div class="image-mycol" style="text-align:center"><a href="/mystuff/collectibles/edit/{{ item.id }}">
+		<img src="{{ item.item.image }}" alt="{{ item.item.title }}"  /></a></div><br />
+		<div class="content mycol" style="text-align:center"><a href="/mystuff/collectibles/edit/{{ item.id }}">{% truncate item.item.title 38 %}</a></div>
+		<div class="meta mycol">
+		Added: {{ item.added_on|date:"m.d.Y" }}<br /><a href="/mystuff/collectibles/edit/{{ item.id }}">Edit This</a><br />
+		<a href="{{ item.item.type.parent_url }}/{{ item.item.slug }}">View Oringial</a>
+		</div>
+	</li>
+{% endfor %}
+</ul>
+</div>
+{% paginate %}
+{% endblock %}

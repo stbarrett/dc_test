@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load format %}
+{% block title %}{{ page.title|striptags }}{% endblock %}
+{% block meta_description %}{% truncate stripped_content 150 %}{% endblock %}
+{% block content %}
+
+{% load field_value %}
+
+<div id="breadcrumb"> 
+	<a href="/">Home</a>&nbsp;&nbsp;&#187;&nbsp;&nbsp;{{ page.title }}
+</div> 
+<div class="hr-full"></div>
+
+<div id="content-full" class="rounded"> 
+<h1>{{ page.title }}</h1>
+<div class="hr-full"></div> 
+{% if msg %}{% else %}{{ page.content }}{% endif %}
+
+{% ifequal page.slug "contact" %}
+	{% if msg %}
+		{{ msg }}
+	{% else %}
+		<form method="post" action="." class="form1" id="theForm">
+		<fieldset>
+			<label for="id_name" style="width:120px; padding-top:3px;" class="floatLeft">Your Name:</label>
+			<input type="text" id="id_name" name="name" value=""  class="text" style="width:250px;" />
+			<br /><br />
+			<label for="id_email" style="width:120px; padding-top:3px;" class="floatLeft">Your Email:</label>
+			<input type="text" id="id_email" name="email" value=""  class="text" style="width:250px;" />
+			<br /><br />
+			<label for="id_subject" style="width:120px; padding-top:3px;" class="floatLeft">Subject:</label>
+			<input type="text" id="id_subject" name="subject" value="" maxlength="128" class="text" style="width:250px;" />
+			<br /><br />
+			<label for="id_comment" style="width:120px; padding-top:3px;" class="floatLeft">Comment:</label>
+			<textarea id="id_comment" name="comment" class="text" style="width:400px; height:300px;"></textarea>
+			<br /><br />
+		</fieldset>
+		<br />
+		<a href="#" id="submit" class="button-sml" style="margin-left:120px;">Submit</a><br /><br />
+		</form>
+		
+		<script type="text/javascript">
+		$(document).ready(function() {
+		
+			$("#submit").bind('click', function() {
+				$("#theForm").submit();
+				return false;
+			});
+		});
+		</script>
+	{% endif %}
+{% endifequal %}
+
+</div>
+
+
+{% endblock %}
+

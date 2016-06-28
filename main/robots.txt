@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /member/password/
+Disallow: /member/password/*
+Allow: /

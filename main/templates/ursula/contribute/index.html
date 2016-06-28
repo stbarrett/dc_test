@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Contribute to DizCollect.com{% endblock %}
+{% block content %}
+{% load format %}
+{% load field_value %}
+
+<div id="breadcrumb"> 
+	<a href="/">Home</a>&nbsp;&nbsp;&#187;&nbsp;&nbsp;Contribute
+</div> 
+<div class="hr-full"></div>
+
+<div id="content-full" class="rounded"> 
+<h1>Contribute Content To DizCollect.com</h1>
+<div class="hr-full"></div> 
+<p>
+Do you have an image we are missing of an item? Do you have an item you cannot find on our site and wish to submit your images and content for? If so, please fill out the form below.
+</p>
+{% if request.user %}
+{% else %}
+<p>
+We noticed you are not <a href="/member/login?next={{ request.get_full_path|iriencode }}">Signed In</a>, no problem, please make sure you enter your information below so we know who you are and can give you the proper credit. We love to give credit where it is due.
+{% endif %}
+<p>
+Please note, we are trying to really control the data to help you find what you are looking for by properly categorizing and tagging it. Your item will not be added to our database until we have a chance to view it.</p>
+{% if msg %}
+	{{ msg }}
+{% else %}
+		<form method="post" action="." class="form1">
+		{% if request.user.id %}
+		<input type="hidden" name="user_id" value="{{ request.user.id }}" />
+		{% endif %}
+		<fieldset>
+			<label for="id_name" style="width:120px; padding-top:3px;" class="floatLeft">Your Name:</label>
+			{{ request.user.username }}
+			<br /><br />
+			<label for="id_name" style="width:120px; padding-top:3px;" class="floatLeft">Your Name:</label>
+			<input type="text" id="id_name" name="name" value=""  class="text" style="width:250px;" />
+			<br /><br />
+			<label for="id_email" style="width:120px; padding-top:3px;" class="floatLeft">Your Email:</label>
+			<input type="text" id="id_email" name="email" value=""  class="text" style="width:250px;" />
+			<br /><br />
+			<label for="id_subject" style="width:120px; padding-top:3px;" class="floatLeft">Subject:</label>
+			<input type="text" id="id_subject" name="subject" value="" maxlength="128" class="text" style="width:250px;" />
+			<br /><br />
+			<label for="id_comment" style="width:120px; padding-top:3px;" class="floatLeft">Comment:</label>
+			<textarea id="id_comment" name="comment" class="text" style="width:400px; height:300px;"></textarea>
+			<br /><br />
+		</fieldset>
+		<br />
+		<input type="submit" id="submit" name="submit" value="Submit" style="margin-left:120px;" /><br /><br />
+		</form>
+		
+		<script type="text/javascript">
+		$(document).ready(function() {
+	
+			$("#submit").button();
+		});
+		</script>
+{% endif %}
+
+
+</div>
+
+
+{% endblock %}
+

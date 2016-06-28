@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Register{% endblock %}
+{% load facebook_tags %}
+{% load field_value %}
+{% block content %}
+
+<div id="content-full" class="rounded">
+	<div class="floatLeft" style="padding-left:10px; padding-top:5px; border-right:#b8ae71 1px solid; padding-top:5px; margin-right:25px; padding-right:50px; ">
+	
+	<h2>Create a DizCollect Only Account</h2><br />
+		<form method="post" action="." class="form1" id="theForm">
+		<fieldset>
+			<label for="username" style="width:120px; padding-top:3px;" class="floatLeft{% if form.errors.username %} error{% endif %}">Username:</label>
+			<input type="text" id="id_username" name="username" value="{{ form.username|field_value }}" class="text" style="width:200px;" />
+			{% if form.errors.username %}<br /><div class="error" style="padding-left:120px; padding-top:5px;">{{ form.errors.username|striptags }}</div>{% endif %}
+			<br /><br />
+			<label for="email" style="width:120px; padding-top:3px;" class="floatLeft{% if form.errors.email %} error{% endif %}">Email address:</label>
+			<input type="text" id="id_email" name="email" value="{{ form.email|field_value }}"  class="text" style="width:200px;" />
+			{% if form.errors.email %}<br /><div class="error" style="padding-left:120px; padding-top:5px;">{{ form.errors.email|striptags }}</div>{% endif %}
+			<br /><br />
+			<label for="password" style="width:120px; padding-top:3px;" class="floatLeft{% if form.errors.password1 %} error{% endif %}">Password:</label>
+			<input type="password" id="id_password1" name="password1" class="text" style="width:200px;"  />
+			{% if form.errors.password1 %}<br /><div class="error" style="padding-left:120px; padding-top:5px;">{{ form.errors.password1|striptags }}</div>{% endif %}
+			<br /><br />
+			<label for="password" style="width:120px; padding-top:3px;" class="floatLeft{% if form.errors.password1 %} error{% endif %}">Verify Password:</label>
+			<input type="password" id="password2" name="password2" class="text" style="width:200px;"  />
+			{% if form.errors.password2 %}<br /><div class="error" style="padding-left:120px; padding-top:5px;">{{ form.errors.password2|striptags }}</div>{% endif %}
+			<br /><br />
+		</fieldset>
+		<br />
+		<a href="#" id="submit" class="button-med">Create Your Account</a>
+		<br class="clear" /><br />
+		<div class="error"><small><em>*All Fields Required</em></small></div>
+		<br />
+		</form>		
+
+	</div>
+	<div class="floatLeft" style="width:450px; ">
+		<h2>Create a DizCollect Account using your Facebook Credentials</h2><br />
+		{% show_connect_button %}
+	</div>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+
+	$("#submit").bind('click', function() {
+		$("#theForm").submit();
+		return false;
+	});
+});
+</script>
+{% endblock %}

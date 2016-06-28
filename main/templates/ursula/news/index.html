@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}News &amp; Articles{% endblock %}
+{% block meta_description %}Read News and Articles about Disney Collecting and Diney Collectibles{% endblock %}
+{% block content %}
+{% load thumbnail %}
+{% load format %}
+{% load tags %}
+{% load items %}
+{% load posts %}		
+{% load pagination_tags %}
+
+{% autopaginate items 10 %}
+
+<div id="breadcrumb"> 
+	<a href="/">Home</a>&nbsp;&nbsp;&#187;&nbsp;&nbsp;News
+</div> 
+<div class="hr-full"></div>
+
+
+<!-- Start blog-content --> 
+<div id="blog-content"> 
+	<div id="blog-item"> 
+	{% for item in items %}
+		{% include "ursula/includes/news/news-item.html" %}
+	{% endfor %}
+	</div> 
+	{% paginate %}
+</div> 
+<!-- End blog-content -->
+
+{% include "ursula/includes/sidebar.html" %}
+
+
+{% endblock %}
+

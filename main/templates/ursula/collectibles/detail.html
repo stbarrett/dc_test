@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% block title %}{{ item.title|striptags }} | {{ type.title_single }}{% endblock %}
+{% load thumbnail %}
+{% load format %}
+{% load items %}
+{% block meta_description %}{% truncate stripped_content 150 %}{% endblock %}
+{% block content %}
+<div id="breadcrumb"> 
+	<a href="/">Home</a>&nbsp;&nbsp;&#187;&nbsp;&nbsp;<a href="/collectibles/">Collectibles</a>&nbsp;&nbsp;&#187;&nbsp;&nbsp;<a href="/collectibles/{{ type.slug}}/">{{ type.title }}</a>&nbsp;&nbsp;&#187;&nbsp;&nbsp;{{ type.title_single }}
+</div> 
+<div class="hr-full"></div> 
+<div id="content-left"> 
+	{% if image_list %}
+	<div id="item-img-container" class="rounded">
+	<div id="item-image">	
+	{% for img in image_list %}
+		{% if img.is_active %}
+		<div class="image"{% ifnotequal forloop.counter 1 %} style="display:none"{% endifnotequal %}">
+			<div class="image-container"><a href="{{ MEDIA_URL }}{{img.image.src }}" title="{% if img.caption %}{{ img.caption }}{% endif %}" rel="slide-show-img-big"><img src="{% thumbnail img.image.src 320x320 %}" alt="{% if img.caption %}{{ img.caption }}{% endif %}" /></a></div>
+			<div class="copyright">{% if img.image.copyright %}{{ img.image.copyright }}{% endif %}</div>
+		</div>
+		{% endif %}
+	{% endfor %}	
+	</div>
+	</div>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('#item-image').cycle({
+				prev:   '#prev', 
+			    next:   '#next', 
+			    speed:1000
+			});
+	
+			$("a[rel='slideshow-img']").colorbox({ speed: 500, transition: 'elastic' });
+			$("a[rel='slide-show-img-big']").colorbox({ speed: 500, transition: 'elastic' });
+		});
+	</script>
+	
+	{% else %}
+		<div id="item-img-container" class="rounded">
+			<div class="image"><img src="{{ MEDIA_URL }}/img/missing_340x300.png" alt="{{ item.title }}" width="340" height="300" /></div>
+		</div>
+	{% endif %}		
+	
+	
+	<a href="/contribute/image/{{ item.id }}/?type={{ type.slug}}" style="floatLeft" class="button-lrg" id="submit-image">Contribute your image for this item</a>
+	
+	<div class="module rounded" style="text-align:center; margin-top:10px;">
+		<a href="http://touringplans.com/?utm_campaign=friends&utm_medium=website&utm_source=dizcollect&utm_content=r1&property_id=1" target="_blank"><img src="http://media.dizcollect.com/img/320x250White.png" alt="TouringPlans.com - Save Time and Money on your Disney Vacation" /></a>
+	</div>
+
+</div> 
+<!-- Start content-right --> 
+<div id="content-right"> 
+	<div id="item"> 
+		<div id="item-top" class="rounded">
+		<h1>{{ item.title }}</h1>
+		<div id="add-box">
+			{% if has_mystuff %}
+				<div class="add-mystuff"><div class="ihave"><div class="ui-button ui-widget ui-state-disabled ui-corner-all ui-button-text-only ui-state-focus"><span class="ui-button-text">I have this</span></div></div></div>
+			{% else %}
+				<div class="add-mystuff"><a href="#" class="button-sml">Add to My Stuff</a><br class="clear" /><div class="adding">Adding...</div></div>
+			{% endif %}
+			{% if has_wishlist %}
+				<div class="add-wishlist"><div class="ihave"><div class="ui-button ui-widget ui-state-disabled ui-corner-all ui-button-text-only ui-state-focus"><span class="ui-button-text">In my wish list</span></div></div></div>
+			{% else %}
+				<div class="add-wishlist"><a href="#" class="button-sml">Add to My Wish List</a><br class="clear" /><div class="adding">Adding...</div></div>
+			{% endif %}
+			{% include "ursula/includes/share.html" %}	
+		</div>
+		<div id="added-msg"><div class="ui-icon ui-icon-info floatLeft"></div><div class="add-msg-text">This item as been added</div></div>
+		</div>
+		<br class="clear" /> 
+		<div class="rounded item-content">
+		{% if item.release_date %}<div class="meta-left">Release Date:</div><div class="meta-right">{{ item.release_date|date:"F d, Y" }}</div> {% endif %}
+		{% if item.retail_price %}<div class="meta-left">Retail Price:</div><div class="meta-right">${{ item.retail_price }}<br /><strong><em><small>Please note, we do not sell these items, we only show their retail value. We are working on providing links to sites that do sell these items.</small></strong></em></div>{% endif %} 
+		{% if item.edition_size %}<div class="meta-left">Edition Size:</div><div class="meta-right">{{ item.edition_size }}</div>{% endif %} 
+		{% if item.official_link %}<div class="meta-left">Official Link</div><div class="meta-right"><a href="{{ item.official_link }}" target="_blank">{{ item.official_link }}</a></div>{% endif %} 
+		{% if item.tag_list_set.all %}<div class="meta-left">Tags:</div><div class="meta-right">{% for tag in item.tag_list_set.all %}<a href="{{ item.type.parent_url }}/?tag={{tag.tag.id}}">{{tag.tag.name}}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</div> {% endif %}
+		{% if item.location_list_set.all %}<div class="meta-left">Locations:</div><div class="meta-right">{% for location in item.location_list_set.all %}{% comment %}<a href="/locations/{{location.location.slug}}">{% endcomment %}{{location.location.name}}{% comment %}</a>{% endcomment %}{% if not forloop.last %}, {% endif %}	{% endfor %}</div> {% endif %}
+		{% if item.person_list_set.all %}<div class="meta-left">People:</div><div class="meta-right">{% for person in item.person_list_set.all %}{% comment %}<a href="/people/{{person.person.slug}}">{% endcomment %}{{person.person.first_name}} {{person.person.last_name}}{% comment %}</a>{% endcomment %}{% if not forloop.last %}, {% endif %}{% endfor %}</div>{% endif %}
+		{% if item.content %}<div class="meta-left">Description:</div><div class="meta-right">{{ item.content }}</div>{% endif %} 
+		</div> 
+		{% comment %}
+		<div class="rounded item-content">
+		<h3>Description</h3>
+		<div class="hr-full"></div>
+			{% if item.content %}{{ item.content }}{% endif %}
+		</div>
+		{% endcomment %}
+
+		{% if ebay_list %}
+		<div class="rounded item-related-pins">
+		<img src="http://developer.ebay.com/join/logo/images/logo_rnoebay_intro.gif" alt="Right Now on EBay" />
+		<div class="hr-full"></div>
+			{% for ebay_item in ebay_list %}
+			<div class="ebay-listing">
+				{% if ebay_item.gallery_url %}
+					<div class="ebay-img"><a href="{{ ebay_item.url }}" target="_blank"><img src="{{ ebay_item.gallery_url }}" alt="{{ ebay_item.title }}" border="0" /></a></div>
+				{% endif %}
+				<h4><a href="{{ ebay_item.url }}" target="_blank">{{ ebay_item.title }}</a></h4>
+				<div class="end-time">Ends: {{ ebay_item.end_time|date:"D d M Y - h:i:s A" }} PST</div>
+				<div class="price">Current Price: ${{ ebay_item.current_price }}</div>
+				{% if ebay_item.buyit_now_price %}<div class="price">Buy it Now: ${{ ebay_item.buyit_now_price }}</div>{% endif %}
+			</div>
+
+			{% endfor %}
+		</div>
+		{% endif %}
+
+		{% if random_pins %}
+		<div class="rounded item-related-pins">
+		<h3>Related Disney Pins</h3>
+		<div class="hr-full"></div>
+			<ul class="item-list item-list-meta item-list-half">
+			{% for random_item in random_pins %}
+				<li{% if forloop.first %} class="first"{% endif %}{% if forloop.last %} class="last"{% endif %}>
+					<div class="image rounded"><a href="/collectibles/pins/{{ random_item.slug }}">{% ifnotequal random_item|first_image "img/pins/main/" %}<img src="{% thumbnail random_item|first_image 100x100 %}" alt="{{ random_item.title }}" width="100" height="100" />{% else %}<img src="{{ MEDIA_URL }}img/missing_100x100.png" alt="{{ random_item.title }}" width="100" height="100" />{% endifnotequal %}</a></div>
+					<div class="content"><a href="/collectibles/pins/{{ random_item.slug }}">{% truncate random_item.title 40 %}</a></div>
+					<div class="meta">{{ random_item.release_date|date:"m.d.Y" }}{% if random_item.retail_price %} | ${{ random_item.retail_price }}{% endif %}</div>
+				</li>
+			{% endfor %}
+			</ul>
+		</div>
+		{% endif %}
+		{% include "ursula/includes/comments/comments_items.html" %}
+	</div> 
+	
+</div> 
+<!-- End content-right --> 
+			
+
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}{{ item.title|striptags }}{% endblock %}
+{% load thumbnail %}
+{% load format %}
+{% load tags %}
+{% load items %}
+{% load posts %}
+{% block meta_description %}{% truncate stripped_content 150 %}{% endblock %}
+{% block content %}
+
+{% post_categories as post_cats item.id %}
+
+<div id="breadcrumb"> 
+	<a href="/">Home</a>&nbsp;&nbsp;&#187;&nbsp;&nbsp;<a href="/news/">News</a>&nbsp;&nbsp;&#187;&nbsp;&nbsp;Post
+</div> 
+<div class="hr-full"></div>
+
+<!-- Start blog-content --> 
+<div id="blog-content"> 
+	<div id="blog-item"> 
+		{% include "ursula/includes/news/news-item.html" %}
+	</div>
+	
+	{% include "ursula/includes/comments/comments_news.html" %}
+	 
+</div> 
+<!-- End blog-content -->
+{% include "ursula/includes/sidebar.html" %}
+
+
+
+{% endblock %}
+

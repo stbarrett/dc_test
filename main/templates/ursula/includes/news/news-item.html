@@ -1,0 +1,28 @@
+{% load posts %}
+{% post_categories as post_cats item.id %}
+<div class="post-item{% if forloop.last %}-last{% endif %}">
+	<div class="rounded post-content">
+		<h2><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></h2>
+		<div class="date">{{ item.publish_date|date:"F d, Y &#8211; h:i A" }}</div>
+		<div class="hr-full"></div>
+		{% ifequal type "summary" %} {{ item|show_summary }} {% endifequal %}
+		{% ifequal type "detail" %} {{ item.content }} {% endifequal %}
+		
+		{% if post_cats %}
+		<div class="hr-full"></div>
+		<div class="floatLeft">
+		{% for cat in post_cats %}
+			<a href="/news/category/{{ cat.post_category.slug }}">{{ cat.post_category.title }}</a>{% if not forloop.last %}, {% endif %}
+		{% endfor %}
+		</div>
+		{% endif %}
+		<div class="floatRight">
+		<script>
+		var idcomments_acct = 'c46479233ab2869a68ab0ef45d808822';
+		var idcomments_post_id = '{{ item.id }}';
+		var idcomments_post_url = '{{ item.get_absolute_url }}'
+		</script>
+		<script type="text/javascript" src="http://www.intensedebate.com/js/genericLinkWrapperV2.js"></script>
+		</div>
+	</div>
+</div>

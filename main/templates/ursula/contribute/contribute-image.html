@@ -1,0 +1,126 @@
+{% extends "base-popup.html" %}
+{% load thumbnail %}
+{% block content %}
+<div style="height:100%; width:100%; background-color:#fff; float:left; padding-bottom:10px;">
+<h1>Contribute Your Image{% ifequal step 2 %} - Crop Image {% endifequal %}{% ifequal step 3 %} - Copyright and Caption {% endifequal %}{% ifequal step 4 %} - Thank You {% endifequal %}</h1>
+<div class="hr-full"></div> 
+{% ifequal step -1 %}
+<p>You are uploading your image for <strong>"{{ item.title }}"</strong>.</p>
+<p>Please note, this will not show up immediately, all uploads are moderated. When your image goes up, you will receive an email letting you know it's been approved.</p>
+
+<p><strong>You must be signed in in to upload an image for this item.</strong></p>
+<p><a href="/member/login" class="button-sml" target="_top">Sign In</a><a href="/member/register/" class="button-sml button-sml-left-margin" target="_top">Sign Up</a> 
+{% endifequal %}
+
+
+{% ifequal step 1 %}
+<p>You are uploading your image for <strong>"{{ item.title }}"</strong>.</p>
+<p>Please note, this will not show up immediately, all uploads are moderated. When your image goes up, you will receive an email letting you know it's been approved.</p>
+
+	<form method="post" action="/contribute/image/{{ item.id }}/" class="form1" id="myForm" enctype="multipart/form-data">
+	<input type="hidden" name="step" value="{{ step }}" />
+	<fieldset>
+	<label for="id_image" style="width:120px; padding-top:3px;" class="floatLeft">Image:</label>
+	<input type="file" id="id_image" name="image" value="" class="text" size="30" style="width:350px;" />
+	<br /><br />
+	</fieldset>
+	<br />
+	<a href="#" id="upload" class="button-sml">Upload Image</a>
+	<div class="adding">Uploading...</div>
+	</form>
+	
+	<script type="text/javascript">
+	$(document).ready(function() {
+		$("#upload").bind('click', function() {
+			$("#upload").hide(0);
+			$(".adding").show(0);
+			$("#myForm").submit();
+			return false;
+		});
+	});
+	</script>
+{% endifequal %}
+{% ifequal step 2 %}
+	<div class="floatLeft" style="width:800px;"><img src="{{ MEDIA_URL }}{{ img }}" id="photo"  /></div>
+	<script type="text/javascript">
+		if($(window).width() < 1024) {
+			document.write('<br class="clear" /><br /><div>');
+		} else {
+			document.write('<div class="floatLeft" style="width:220px; padding-left:10px;">');
+		}
+
+	</script>
+	
+		<p>Please crop your image. When ready, hit the <strong>'Continue'</strong> button to continue.</p>
+		<p>The minimum width/height is <strong>325x325</strong>. If you wish to use the whole image, just drag the handles out to each corner.</p>
+		<a href="#" id="submit" class="button-sml">Continue</a>
+		<br class="clear" /><br />
+	</div>
+	<form method="post" action="/contribute/image/{{ item.id }}/" class="form1" id="myForm">
+		<input type="hidden" name="step" value="{{ step }}" />
+		<input type="hidden" name="image" value="{{ img }}" />
+		<input type="hidden" name="x1" id="x1" value="" />
+		<input type="hidden" name="y1" id="y1" value="" />
+		<input type="hidden" name="x2" id="x2" value="" />
+		<input type="hidden" name="y2" id="y2" value="" />
+	</form>
+
+
+	<script type="text/javascript">
+		$(document).ready(function () { 
+			$('img#photo').imgAreaSelect({ handles: true, persistent:true, onSelectChange: preview, minHeight:325, minWidth:325,x1: 0, y1: 0, x2: 325, y2: 325 });
+
+			$("#submit").bind('click', function() {
+				$("#myForm").submit();
+				return false;
+			});
+		}); 
+		
+		function preview(img, selection) {
+			$("#x1").val(selection.x1);
+			$("#y1").val(selection.y1);
+			$("#x2").val(selection.x2);
+			$("#y2").val(selection.y2);
+		}
+	</script>
+
+{% endifequal %}
+{% ifequal step 3 %}
+	<form method="post" action="/contribute/image/{{ item.id }}/" class="form1" id="myForm">
+		<input type="hidden" name="step" value="{{ step }}" />
+		<input type="hidden" name="image" value="{{ img }}" />
+		
+	<div style="float:left; "><img src="{% thumbnail img 320x320 %}"  /></div>
+	<div style="float:left; padding-left:20px;">
+		<label for="id_caption" style="width:120px; padding-top:3px;" class="floatLeft">Caption:</label>
+		<input type="text" id="id_caption" name="caption" value="" class="text" style="width:350px;" />
+		<div style="font-size:10px; width:470px; padding-top:3px; line-height:16px;">Sentence to describe the image if needed.<br /><em>Example:</em> <strong>Pin, open showing Figment</strong></div>
+		<br /><br />
+		<label for="id_copyright" style="width:120px; padding-top:3px;" class="floatLeft">Copyright:</label>
+		<input type="text" id="id_copyright" name="copyright" value="Uploaded by {{ request.user.username }}" class="text" style="width:350px;" /><br />
+		<div style="font-size:10px; width:470px; padding-top:3px; line-height:16px;">Leave what is there, or change it. When we activate profiles, this will link to yours.<br/><em>Example: </em><strong>Copyright Disney. All Rights Reserved / Disneypins.com</strong></div>
+		<br /><br />
+		<a href="#" id="submit" class="button-sml">Submit Your Image</a>
+		<div class="adding">Uploading...</div>
+	</div>
+	</form>
+	<script type="text/javascript">
+	$(document).ready(function() {
+		$("#submit").bind('click', function() {
+			$("#submit").hide(0);
+			$(".adding").show(0);
+			$("#myForm").submit();
+			return false;
+		});
+	});
+	</script>	
+{% endifequal %}
+{% ifequal step 4 %}
+Thank You for sharing your image. We will moderate the image as soon as possible and you will receive an email when the image has been approved or denied.
+<br /><br />
+<a href="#" onclick="top.$.fn.colorbox.close(); return false;">Close This Window</a>
+{% endifequal %}
+
+</div>
+{% endblock %}
+

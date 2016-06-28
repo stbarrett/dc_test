@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% load thumbnail %}
+{% load format %}
+{% load tags %}
+{% load podcasts %}
+{% load pagination_tags %}
+
+<div id="breadcrumb"> 
+	<a href="/">Home</a>&nbsp;&nbsp;&#187;&nbsp;&nbsp;Podcasts
+</div> 
+<div class="hr-full"></div>
+
+<div id="content-full" class="rounded"> 
+<h3>Disney Podcasts</h3> 
+	{% if msg %}
+		{{ msg }}
+	{% else %}
+<p>Our systems are in the process of going through Disney podcasts and tagging their episodes and categorizing them so you can find what you want to listen too.</p>
+<p>If you have a Disney podcast you like or are the author of, please send us the link and any comments you have about the podcast by using the form below. Feel free to recommend tags or category names for this podcast.</p>
+
+<form method="post" action="." class="form1" id="theForm">
+		<fieldset>
+			<label for="id_name" style="width:120px; padding-top:3px;" class="floatLeft">Podcast Name:</label>
+			<input type="text" id="id_name" name="name" value=""  class="text" style="width:250px;" />
+			<br /><br />
+			<label for="id_email" style="width:120px; padding-top:3px;" class="floatLeft">Your Email:</label>
+			<input type="text" id="id_email" name="email" value="" class="text" style="width:250px;" />
+			<br /><br />
+			<label for="id_link" style="width:120px; padding-top:3px;" class="floatLeft">Link to Podcast:</label>
+			<input type="text" id="id_link" name="link" value="" class="text" style="width:400px;" />
+			<br /><br />
+			<label for="id_comment" style="width:120px; padding-top:3px;" class="floatLeft">Comment:</label>
+			<textarea id="id_comment" name="comment" class="text" style="width:400px; height:300px;"></textarea><br />
+			<br /><br />
+		</fieldset>
+		<a href="#" id="submit" class="button-sml" style="margin-left:120px;">Submit</a><br /><br />
+		</form>
+		
+		<script type="text/javascript">
+		$(document).ready(function() {
+		
+			$("#submit").bind('click', function() {
+				$("#theForm").submit();
+				return false;
+			});
+		});
+		</script>
+	{% endif %}
+
+</div>
+
+{% comment %}
+<ul class="podcast-list rounded" style="padding-left:4px;">
+{% for item in items %}
+	<li{% if forloop.counter|divisibleby:"2" %} class="last"{% endif %}>
+		<div class="image rounded"><div class="img-int">{% if item.image %}<a href="/podcasts/{{ item.slug }}"><img src="{% thumbnail item|podcast_image 100x100 %}" alt="{{ item.title }}"  /></a>{% else %}<a href="/podcasts/{{ item.slug }}"><img src="{{ MEDIA_URL }}img/missing_100x100.png" alt="{{ item.title }}" width="100" height="100" /></a>{% endif %}</div></div>
+		<div class="title"><a href="/podcasts/{{ item.slug }}">{% truncate item.title 200 %}</a></div>
+		<div class="desc">{% if item.description %}{% truncate item.description 160 %}{% else %}&nbsp;{% endif %}</div>
+		<div class="links"><a href="/podcasts/{{ item.slug }}">Read more</a></a></div>
+	</li>
+	
+{% endfor %}
+</ul>
+
+</div>
+
+{% endcomment %}
+{% endblock %}
+

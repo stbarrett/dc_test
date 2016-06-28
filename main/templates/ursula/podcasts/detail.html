@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block content %}
+{% load thumbnail %}
+{% load format %}
+{% load items %}
+{% load pagination_tags %}
+
+{% autopaginate feed_items 10 %}
+
+
+<div id="breadcrumb"> 
+	<a href="/">Home</a>&nbsp;&nbsp;&#187;&nbsp;&nbsp;<a href="/podcasts">Podcasts</a>&nbsp;&nbsp;&#187;&nbsp;&nbsp;Podcast
+</div> 
+
+<div class="hr-full"></div>
+<div id="content-left"> 
+	<div id="item-image"> 
+		{% ifnotequal item.image "img/pins/main/" %}
+		<img src="{% thumbnail item.image 340x340 %}" alt="{{ item.title }}" /><br /> 
+		{% else %}
+		<img src="/uploads/img/missing_340x300.png" alt="{{ item.title }}" width="340" height="300" /><br />
+		{% endifnotequal %}
+	</div> 
+</div> 
+<!-- Start content-right --> 
+<div id="content-right"> 
+	<div id="item"> 
+		<h2>{{ item.title }}</h2>
+		<div id="add-box">
+			{% if has_mystuff %}
+				<div class="add-mystuff"><div class="ihave"><div class="ui-button ui-widget ui-state-disabled ui-corner-all ui-button-text-only ui-state-focus"><span class="ui-button-text">I have this</span></div></div></div>
+			{% else %}
+				<div class="add-mystuff"><a href="#">Add to My Stuff</a><div class="adding">Adding...</div></div>
+			{% endif %}
+			<div class="add-wishlist"><a href="#" style="margin-left:10px;">Add to My WishList</a></div>
+			{% include "ursula/includes/share.html" %}			
+		</div>
+		<div id="added-msg"><div class="ui-icon ui-icon-info floatLeft"></div><div class="add-msg-text">This item as been added</div></div>
+		<br class="clear" /> 
+		<div class="rounded item-content">
+		{% if item.description %}{{ item.description }}{% endif %}
+		
+		{% if item.author %}<div class="meta-left">By: </div><div class="meta-right">{{ item.author }}</div>{% endif %}
+		{% if item.url %}<div class="meta-left">Website: </div><div class="meta-right"><a href="{{ item.url }}" target="_blank">{{ item.url }}</a></div>{% endif %}
+		
+		<div class="hr-full"></div>
+		<div style="float:left;">
+			{% if item.itunes_url %}<div class="floatLeft">
+				<img src="/uploads/img/icons/itunes-32x32.png" alt="Subscribe to iTunes Feed" border="0" style="padding-right:5px;" class="floatLeft" /><a class="floatLeft" style="line-height:32px;" href="{{ item.itunes_url }}" target="_blank">Subscribe to iTunes</a></div>{% endif %}
+			{% if item.feed_url %}<div class="floatLeft"{% if item.itunes_url %} style="padding-left:40px;"{% endif %}>
+				<img src="/uploads/img/icons/feed-32x32.png" alt="Subscribe to XML Feed" border="0" style="padding-right:5px;" class="floatLeft" /><a class="floatLeft" style="line-height:32px;" href="{{ item.feed_url }}" target="_blank">Subscribe to XML Feed</a></div>{% endif %}
+			</div>
+		</div>
+		
+		<h3>Feed Items</h3>
+		{% for feed_item in feed_items %}
+		<div class="rounded item-content">
+			<h4>{{ feed_item.id }} - {{ feed_item.title }}</h4>
+			<div class="date">{{ feed_item.publication_date|date:"F d, Y" }}</div>
+			{% sanitize_html feed_item.description %}
+		</div>
+		{% endfor %}
+		
+		{% paginate %}
+	</div> 
+	
+</div> 
+<!-- End content-right -->		
+
+{% endblock %}

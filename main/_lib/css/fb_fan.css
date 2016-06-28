@@ -1,0 +1,90 @@
+@charset "UTF-8";
+
+body.fan_widget{background:transparent}
+.fan_box .full_widget{
+	background-color: #ffffff;
+	background-image: none;
+	background-repeat: repeat;
+	background-attachment: scroll;
+	background-position: 0% 0%;
+	border: 1px solid #cfc79a;
+	-webkit-border-radius: 5px;	-moz-border-radius: 5px; border-radius: 5px;
+}
+.fan_box .full_widget .connect_top{
+	background-color: #cfc79a;
+}
+.fan_box .connect_top{padding:10px 10px 8px 10px}
+.fan_box .profileimage{float:left;width:40px;height:40px;padding:0 10px 0 0;margin:0 0 4px 0}
+.fan_box .connect_action{padding:0 0 0 8px}
+.fan_box .connect_action .name{
+	line-height:15px;
+	font-size:14px;
+	font-weight:bold;
+	color: #490311;
+}
+.fan_box .connect_button{padding-top:5px}
+.fan_box .connect_button .UIActionButton{margin:1px 0 0 0}
+.fan_box .connect_action a.undo{margin:0 0 0 3px}
+.fan_box .page_stream{
+	text-align:center;
+	padding:0 10px;
+	height:100px;
+	overflow:auto;
+	position:relative;
+	background-color: #fff;
+	border: 1px solid #ffffff;
+}
+.fan_box .page_stream .loader{padding-top:20px}
+.fan_box .UIIntentionalStory{background:transparent;text-align:left}
+.fan_box .UIIntentionalStory .UIMediaItem_UnknownWidth{max-width:100px}
+.fan_box .connections{
+	padding:10px 0 4px 10px;
+	border-top: 1px solid #d5d5d5;
+}
+.fan_box .connections .connections_grid{padding-top:5px}
+.fan_box .connections_grid .grid_item{float:left;padding:0 5px 8px 0;overflow:hidden;width:50px}
+.fan_box .connections_grid .grid_item .name{
+	font-size:9px;
+	color:#FFFFFF;
+	overflow:hidden;
+	padding-top:2px;
+	text-align:center;
+	white-space:nowrap
+}
+.fan_box .hidden{display:none}
+.fan_box .connect_span{margin:0 0 1px 0}
+
+#bootloader_css_connect_connect_css { height: 42px; }
+a
+
+{
+	cursor: pointer;
+	color: #490311;
+	outline-style: none;
+	text-decoration: none;
+}
+
+a:hover
+
+{
+
+text-decoration: underline;
+
+}
+.UIStoryAttachment_Copy 
+
+{
+	color: #333333;
+	padding-top: 3px;
+}
+.fan_box .connections_grid .grid_item .name 
+
+{
+	font-size: 9px;
+	color: #333333;
+	overflow-x: hidden;
+	overflow-y: hidden;
+	padding-top: 2px;
+	text-align: center;
+	white-space: nowrap;
+}

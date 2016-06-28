@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% load pagination_tags %}
+
+<h2>Tags</h2>
+
+{% autopaginate tag_list %}
+
+{% for tag in tag_list %}
+<a href="{{ tag.slug }}">{{ tag.name }}</a>
+<br /><br />
+
+{% endfor %}
+
+{% paginate %}
+
+{% endblock %}

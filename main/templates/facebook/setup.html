@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% load facebook_tags %}
+{% load field_value %}
+{% block content %}
+
+<div id="content-full" class="rounded" style="height:100%;">
+	<div class="floatLeft" style="padding-left:10px; padding-top:5px;">
+	<h2>Finish Dizcollect Registration </h2>
+	<p>Enter a username and email address below to link a new account with your Facebook account.</p>
+
+{% if registration_form.errors %}
+	<div style="font-weight:bold; color:#f00; padding:10px; width:310px; background:#eee; border:#666 1px solid; margin-bottom:30px;">
+    {% for error in registration_form.errors %}
+    {% ifequal error|escape "username" %}
+    	Username:<br />
+    	{% ifequal registration_form.errors.username|striptags "User with this Username already exists." %}
+    		This username is already used, please select another.
+    	{% else %}
+    		{{ registration_form.errors.username|striptags }}
+    	{% endifequal %}
+    	{% ifequal registration_form.errors|length 2 %}<br /><br />{% endifequal %}
+    {% endifequal %}
+    {% ifequal error|escape "email" %}
+    	Email:<br />{{ registration_form.errors.email|striptags }}
+    {% endifequal %}
+    {% endfor %}
+   	</div>
+{% endif %}	
+	
+	<form action="." method="post" accept-charset="utf-8" class="form1">
+	<input type="hidden" name="register" value="true" id="register">
+	
+	<fieldset>
+		<label for="username" style="width:120px; padding-top:3px;" class="floatLeft">Username:</label>
+		<input type="text" id="id_username" name="username" class="text" value="{{ registration_form.username|field_value }}" style="width:200px;" />
+		<br /><br />
+		<label for="email" style="width:120px; padding-top:3px;" class="floatLeft">Email address:</label>
+		<input type="text" id="id_email" name="email" class="text" value="{{ registration_form.email|field_value }}" style="width:200px;" />
+		<br /><br />
+		</fieldset>
+	   {% if next %}
+	   <input type="hidden" name="next" value="{{ next }}" id="next">
+	   {% endif %}
+		<input type="submit" id="submit_reg" name="submit" value="Finish Registration and Login" /><br /><br />
+		<small><strong><em>*All Fields Required</em></strong></small>
+	</form>	
+	</div>
+	
+	
+	{% comment %}
+	<div class="floatLeft" style="background-color:#b8ae71; width:1px; height:260px; margin-left:0px; marign-right:10px;"></div>
+	<div class="floatRight" style="padding-right:15px; padding-top:5px; width:500px;">
+	<h2>Link My Facebook and Dizcollect Accounts </h2>
+	<p>If you currently have a Dizcollect account, login in below and we will link your facebook account to your Dizcollect account.</p>
+	{% if login_form.errors %}
+	<p class="error">Your username and password didn't match. Please try again.</p>
+	{% endif %}
+	<form action="." method="post" accept-charset="utf-8" class="form1">
+	<input type="hidden" name="login" value="true" id="login">
+		<label for="username" style="width:120px; padding-top:3px;" class="floatLeft">Username:</label>
+		<input type="text" id="id_username" name="username" class="text" style="width:200px;" />
+		<br /><br />
+		<label for="password" style="width:120px; padding-top:3px;" class="floatLeft">Password:</label>
+		<input type="password" id="id_password" name="password" class="text" style="width:200px;" />
+		<br /><br />
+	{% if next %}
+	<input type="hidden" name="next" value="{{ next }}" id="next">
+	{% endif %}
+	<input type="submit" id="submit_link" value="Link My Accounts and Log In"><br /><br />
+	<small><strong><em>*All Fields Required</em></strong></small>
+	</form>
+	</div>
+	{% endcomment %}
+</div>
+
+	<script type="text/javascript">
+	$(document).ready(function() {
+		$("#submit_reg").button();
+	});
+	</script>
+{% endblock %}

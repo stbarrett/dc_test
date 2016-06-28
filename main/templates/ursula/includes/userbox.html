@@ -1,0 +1,18 @@
+<div id="userbox">
+	{% if request.user.username %}
+	<div id="user">Hello {{ request.user.username }} &nbsp;|&nbsp;<a href="/mystuff/">My Stuff</a> &nbsp;|&nbsp;
+	{% if user.facebook_profile %}
+	<a id="logout" href="/member/signout/" onclick='FB.Connect.ifUserConnected(null,function() { window.location = "/member/signout/" }); FB.Connect.logoutAndRedirect("/member/signout/"); return false;'>Sign out</a>
+	{% else %}
+	<a id="logout" href="/member/signout/">Sign out</a>
+	{% endif %} 
+	</div>
+	{% else %}
+	<div id="user"><a href="/member/login?next={{ request.get_full_path|iriencode }}">Sign In</a> &nbsp;|&nbsp; <a href="/member/register">Sign Up</a></div>
+	{% endif %}
+	<ul id="site-meta">
+		<li><a href="http://www.twitter.com/dizcollect" target="_blank" class="twitter" title="Twitter"></a></li>
+		<li><a href="http://www.facebook.com/dizcollect" target="_blank" class="facebook last" title="Facebook"></a></li>
+		<li class="last"><a href="/news/feed" class="rss" title="Rss Feed"></a></li>
+	</ul>
+</div>

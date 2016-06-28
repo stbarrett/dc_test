@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% load thumbnail %}
+{% load format %}
+{% load tags %}
+{% load items %}
+{% load posts %}
+{% load pagination_tags %}
+
+{% autopaginate items 10 %}
+<div id="breadcrumb">
+	{% ifequal archive_type "date" %}
+	<a href="/">Home</a>&nbsp;&nbsp;&#187;&nbsp;&nbsp;<a href="/news/">News</a>&nbsp;&nbsp;&#187;&nbsp;&nbsp;{{ archive_title|date:"F, Y" }} Archive
+	{% endifequal %}
+	{% ifequal archive_type "category" %}
+		<a href="/">Home</a>&nbsp;&nbsp;&#187;&nbsp;&nbsp;<a href="/news/">News</a>&nbsp;&nbsp;&#187;&nbsp;&nbsp;{{ category.title }}
+	{% endifequal %}
+</div> 
+<div class="hr-full"></div>
+
+
+<!-- Start blog-content --> 
+<div id="blog-content"> 
+	<div id="blog-item"> 
+	{% for item in items %}
+		{% include "ursula/includes/news/news-item.html" %}
+	{% endfor %}
+	</div> 
+	{% paginate %}
+</div> 
+<!-- End blog-content -->
+
+{% include "ursula/includes/sidebar.html" %}
+
+
+{% endblock %}
+

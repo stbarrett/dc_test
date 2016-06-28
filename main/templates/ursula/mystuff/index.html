@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}DizCollect: My Collectibles{% endblock %}
+{% load thumbnail %}
+{% load format %}
+{% load items %}
+
+{% block content %}
+
+<!-- Start content-full --> 
+<div id="content-full"> 
+{% include "ursula/mystuff/buttons.html" %}
+
+<h3>Most Recent Items Added</h3> 
+	{% for item in recent_items %}
+	<div class="mystuff-img">
+		{% if item.item|first_image %}
+			{% ifequal item.item|first_image "img/pins/main/" %}
+				<img src="{{MEDIA_URL}}img/missing_100x100.png" alt="{{ item.item.title }}" width="50" height="50" />
+			{% else %}
+				<img src="{% thumbnail item.item|first_image 50x50 %}" alt="{{ item.item.title }}" width="50" height="50" />
+			{% endifequal %}
+		{% else %}
+		<img src="{{MEDIA_URL}}img/missing_100x100.png" alt="{{ item.item.title }}" width="50" height="50" />
+		{% endif %}
+	</div>
+	<div class="mystuff-title">testing testing testing</div>
+	<div class="mystuff-action"><a href="/mystuff/edit/{item.id}">edit</a> | <a href="/mystuff/remove/{item.id}">remove</a> | <a href="#">view public item</a></div>
+	{% endfor %}
+</div>
+{% endblock %}

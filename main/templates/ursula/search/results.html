@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Search Results for "{{ query }}"{% endblock %}
+{% block content %}
+{% load thumbnail %}
+{% load format %}
+{% load items %}
+
+
+{% if no_results %}
+<div class="content-full rounded"> 
+<h2>Search: No Items Found</h2><br />
+No items were found for <strong>"{{ query }}"</strong> and your filter options. Please modify your filter options or try a new search.
+</div>
+{% else %}
+{% if item_results %}
+<div class="content-full rounded"> 
+<h2>Search: Disney Collectibles for "{{ query }}"</h2>
+<div class="hr-full">&nbsp;</div>
+<ul class="item-list item-list-meta item-list-search">
+{% for item in item_results %}
+<li{% if forloop.first %} class="first"{% endif %}{% if forloop.counter|divisibleby:"7" %} class="last"{% endif %}{% if forloop.counter|divisibleby:"8" %} class="first"{% endif %}>
+	<div class="image"><a href="/collectibles/{{ item.type.slug }}/{{ item.slug }}">{% ifnotequal item.image_list_set.all.0.image.src "img/pins/main/" %}<img src="{% thumbnail item|first_image 100x100 %}" alt="{{ item.title }}" width="100" height="100" />{% else %}<img src="{{MEDIA_URL}}img/missing_100x100.png" alt="{{ item.title }}" width="100" height="100" />{% endifnotequal %}</a></div>
+	<div class="content"><a href="/collectibles/{{ item.type.slug }}/{{ item.slug }}">{% truncate item.title 40 %}</a></div>
+	<div class="meta">{{ item.release_date|date:"m.d.Y" }}{% if item.retail_price %} | ${{ item.retail_price }}{% endif %}</div>
+</li>
+{% endfor %}
+</ul>
+<div class="hr-full"></div>
+<a href="/search/?query={{ query }}&t=collectibles" class="view-more">View More Collectible Results &#187;</a>
+
+</div>
+{% endif %}
+{% if book_results %}
+<div class="content-full rounded" style="margin-top:20px;"> 
+<h2>Search: Disney Books for "{{ query }}" </h2>
+<div class="hr-full">&nbsp;</div>
+
+<ul class="item-list item-list-meta item-list-search item-list-books ">
+{% for item in book_results %}
+<li{% if forloop.first %} class="first"{% endif %}{% if forloop.counter0|divisibleby:"6" %} class="first"{% endif %}>
+	<div class="image-mycol" style="text-align:center"><a href="{{item.type.parent_url }}/{{ item.slug }}">
+	{% if item.image %}
+		<img src="{{ item.image }}" alt="{{ item.title }}"  /></a>
+	{% else %}
+		<img src="{{MEDIA_URL}}img/missing_100x100.png" alt="{{ item.title }}" width="100" height="100" />
+	{% endif %}
+	</a></div><br />
+	<div class="content"><a href="{{item.type.parent_url }}/{{ item.slug }}">{% truncate item.title 40 %}</a></div>
+	<div class="meta">{{ item.release_date|date:"m.d.Y" }}{% if item.retail_price %} | ${{ item.retail_price }}{% endif %}</div>
+</li>
+{% endfor %}
+</ul>
+<div class="hr-full"></div>
+<a href="/search/?query={{ query }}&t=books" class="view-more">View More Book Results &#187;</a>
+{% endif %}
+</div>
+{% endif %}
+{% endblock %}

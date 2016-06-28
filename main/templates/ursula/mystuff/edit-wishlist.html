@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% block title %}DizCollect: My Collectibles - Edit{% endblock %}
+{% load thumbnail %}
+{% load format %}
+{% load items %}
+
+{% block content %}
+
+<div id="message" class="rounded">
+<img src="{{MEDIA_URL}}img/warning_32.png" alt="" style="float:left;" /><div class="msg"><span class="txt">Your item was saved.</span></div>
+</div>
+{% if was_edited %}
+<script type="text/javascript">
+$(document).ready(function() {
+	$("#message").slideDown({ 
+		duration: 500, easing: "easeOutBack"
+	}).animate( { backgroundColor: 'white' }, 500);
+	
+});
+
+</script>
+{% endif %}
+
+<div id="content-full" class="rounded">
+	{% include "ursula/mystuff/buttons.html" %}
+
+{% ifequal item.item.type_id 2 %}
+<div id="content-left"> 
+	<div id="item-image" class="rounded"> 
+	{% if item.item.image %}
+		<img src="{% amazon_img_resize item.item.image 340 %}" alt="{{ item.item.itle }}" class="rounded" /><br />
+	{% else %}
+		<img src="{{ MEDIA_URL }}img/missing_340x300.png" alt="{{ item.title }}" width="340" height="300" />
+	{% endif %} 
+	</div> 
+</div> 
+{% endifequal %}
+	
+{% ifnotequal item.item.type_id 2 %}
+<div id="content-left"> 
+	<div style="height:330px; width:350px;">
+	<div id="item-image"> 
+		{% ifnotequal item.item|first_image "img/pins/main/" %}
+		{% for img in item.item.image_list_set.all %}
+		{% if img.is_active %}
+		<div class="image rounded">
+			<a href="{{ MEDIA_URL }}{{img.image.src }}" title="{{ img.caption }}" rel="slide-show-img-big"><img src="{% thumbnail img.image.src 320x320 %}" alt="{{ img.caption }}" /></a>
+		</div>
+		{% endif %}
+		{% endfor %}
+		{% comment %}<div class="copyright" id="image_copyright">{% if item|first_image_copyright %}{{ item|first_image_copyright }}{% endif %}</div>{% endcomment %}
+		{% else %}
+		<img src="{{ MEDIA_URL }}/img/missing_340x300.png" alt="{{ item.title }}" width="340" height="300" /><br />
+		{% endifnotequal %}
+	</div>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('#item-image').cycle({
+				prev:   '#prev', 
+			    next:   '#next', 
+			    speed:1000
+			});
+
+			$("a[rel='slideshow-img']").colorbox({ speed: 500, transition: 'elastic' });
+			$("a[rel='slide-show-img-big']").colorbox({ speed: 500, transition: 'elastic' });
+		});
+	</script>
+	</div>
+	<br class="clear" />
+	<div id="item-slide-controls">
+	{% ifequal item.item.image_list_set.all|length 1 %}
+		<a href="{{ MEDIA_URL }}{{ item.item|first_image }}" rel="slideshow-img" title="{{ img.caption }}">View Larger Image</a>
+	{% else %}
+		<a href="#" id="prev">&#171; Previous</a>
+		{% for img in item.item.image_list_set.all %}
+			{% ifequal forloop.counter 1 %}<a href="{{ MEDIA_URL }}{{img.image.src }}" rel="slideshow-img" title="{{ img.caption }}">View Large Slideshow</a>{% else %}<a href="{{ MEDIA_URL }}{{img.image.src }}" rel="slideshow-img" title="{{ img.caption }}" ></a>{% endifequal %}
+		{% endfor %}		
+		<a href="#" id="next">Next &#187;</a>
+	{% endifequal %}
+	</div>
+</div> 
+{% endifnotequal %}
+	
+	<div id="content-right-edit"> 
+		<div id="item"> 
+			<h2>{{ item.item.title }}</h2>
+		</div>
+		You added this item to your wish list on <strong>{{ item.added_on|date:"F d, Y" }}</strong>	
+		<div class="hr-full"></div>
+		<form class="form2" method="post" id="itemForm" action=".">
+		<ul>
+			<li>		
+				<label for="notes">Notes:</label><br />
+				<textarea name="notes" id="notes" class="text" style="height:200px;">{% if item.notes %}{{ item.notes }}{% endif %}</textarea>
+			</li>
+		</ul>
+		<a href="#" id="save" class="button-sml">Save</a><a href="#" id="removeWishList" class="button-sml">Remove Item</a>
+		</form>
+	</div>
+</div>
+{% include "ursula/includes/mystuff/confirm-removal-wishlist.html" %}
+<script type="text/javascript">
+$(document).ready(function() {
+	$("#save").bind('click', function() {
+		$("#itemForm").submit();
+	});
+
+	$("#date-got").datepicker({ dateFormat: 'mm/dd/yy' });
+	$("#confirm-removal-dialog").dialog({
+		modal: true,
+		closeOnEscape: true,
+		autoOpen: false,
+		closeText: "Close",
+		width:400
+	});
+	$("#removeWishList").click(function() {
+		$('#confirm-removal-dialog').dialog('open');
+		return false;
+	});
+});
+</script>
+
+
+{% endblock %}

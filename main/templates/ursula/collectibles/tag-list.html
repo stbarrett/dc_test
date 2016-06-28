@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}Diz Collectibles: {{ type.title|striptags }}{% endblock %}
+{% block content %}
+{% load thumbnail %}
+{% load format %}
+{% load tags %}
+{% load items %}
+{% load pagination_tags %}
+
+{% autopaginate items 49 %}
+
+<div id="breadcrumb"> 
+	<a href="/">Home</a>&nbsp;&nbsp;&#187;&nbsp;&nbsp;<a href="/collectibles/">Collectibles</a>&nbsp;&nbsp;&#187;&nbsp;&nbsp;{{ type.title }}
+</div> 
+<div class="hr-full"></div>
+
+
+<div id="sort-container" class="rounded"> 
+	<h3>How do you want to Filter and Sort?</h3> 
+	<form id="sortForm" action="." method="get"> 
+	<ul> 
+		<li><div class="heading">TAGS:</div>
+		{{ type_id }}
+		{% list_tags_for_type type.id as tags_all %}	
+		<select id="tag" name="tag" class="ss">
+			<option value="">---------</option>
+    	{% for tag in tags_all %}
+			<option value="{{ tag.tag__id }}"{% ifequal tag.tag__slug sort_tag %} selected{% endifequal %}>{{ tag.tag__name }}</option>
+		{% endfor %} 
+    	</select>
+		</li>
+		<li><div class="heading">SORT:</div>
+		{% ifequal type.slug "disney-dollars" %} 
+		<select id="sort" name="sort" class="ss">
+			<option value="new"{% ifequal sort "new" %} selected{% endifequal %}>Newest To Oldest</option>
+			<option value="old"{% ifequal sort "old" %} selected{% endifequal %}>Oldest To Newest</option>			
+			<option value="denom_i
+		</select>
+		{% else %}
+		<select id="sort" name="sort" class="ss">
+			<option value="new"{% ifequal sort "new" %} selected{% endifequal %}>Newest To Oldest</option>
+			<option value="old"{% ifequal sort "old" %} selected{% endifequal %}>Oldest To Newest</option>			
+			<option value="high"{% ifequal sort "high" %} selected{% endifequal %}>Price - High to Low</option>
+			<option value="low"{% ifequal sort "low" %} selected{% endifequal %}>Price - Low to How</option>
+		</select>
+		{% endifequal %}
+		</li> 
+		<li class="submit-btn"><input type="submit" value="Filter and Sort" /></li> 
+	</ul> 
+</div> 
+
+<ul class="item-list item-list-meta rounded" style="width:968px;">
+{% for item in items %}
+	<li{% if forloop.first %} class="first"{% endif %}{% if forloop.counter|divisibleby:"7" %} class="last"{% endif %}{% if forloop.counter|divisibleby:"8" %} class="first"{% endif %}>
+		<div class="image rounded"><a href="/collectibles/{{ type.slug }}/{{ item.slug }}">
+		{% if item|first_image %}
+			{% ifequal item|first_image "img/pins/main/" %}
+				<img src="{{MEDIA_URL}}img/missing_100x100.png" alt="{{ item.title }}" width="100" height="100" />
+			{% else %}
+				<img src="{% thumbnail item|first_image 100x100 %}" alt="{{ item.title }}" width="100" height="100" />
+			{% endifequal %}
+		{% else %}
+		<img src="{{MEDIA_URL}}img/missing_100x100.png" alt="{{ item.title }}" width="100" height="100" />
+		{% endif %}
+		
+		</a></div>
+		<div class="content"><a href="/collectibles/{{ type.slug }}/{{ item.slug }}">{% truncate item.title 40 %}</a></div>
+		<div class="meta">{{ item.release_date|date:"m.d.Y" }}{% if item.retail_price %} | ${{ item.retail_price }}{% endif %}</div>
+	</li>
+{% endfor %}
+
+</ul>
+	
+{% paginate %}
+
+</div>
+
+
+{% endblock %}

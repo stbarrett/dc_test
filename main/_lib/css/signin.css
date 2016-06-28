@@ -1,0 +1,85 @@
+@charset "UTF-8";
+
+/* ******************************
+ * Reset based on: http://meyerweb.com/eric/tools/css/reset/
+ ****************************** */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    vertical-align: baseline;
+    background: transparent;
+    font-size: 100%;
+    font-family: Arial, Arial;
+}
+body { line-height: 1; }
+ol, ul { list-style: inside; }
+blockquote, q { quotes: none; }
+blockquote:before, blockquote:after,
+q:before, q:after {
+    content: '';
+    content: none;
+}
+/* remember to define focus styles! */
+:focus { outline: 0; }
+/* remember to highlight inserts! */
+ins { text-decoration: none; }
+del { text-decoration: line-through; }
+/* tables still need 'cellspacing="0"'  */
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+/* resize images cleanly in ie */
+/*img{ -ms-interpolation-mode:bicubic }*/
+
+/* ******************************
+ * Utilities  *********************
+ ****************************** */
+.clear { clear:both; }
+.hidden { display:none; }
+.floatLeft { float:left; }
+.floatRight { float:right; }
+
+/* ******************************
+ * Global Defaults **************
+ ****************************** */
+body {
+    width:100%;
+    height:100%;
+    position:relative;
+    text-align:center;
+    font-size:12px;
+    font-weight:normal;
+    font-family: Arial;
+	color:#000;
+	padding: 20px 0 20px 20px;
+	background:#fff;
+	text-align:left;
+}
+a:link, a:active {
+    color:#e05e1e;
+    text-decoration:underline;
+	outline:none;
+}
+a:visited {
+    color:#e05e1e;
+    text-decoration:underline;
+}
+a:hover {
+    color:#e05e1e;
+    text-decoration:underline;
+}
+
+h1 { font-size:18px; font-weight:bold; padding-bottom:15px }
+
+

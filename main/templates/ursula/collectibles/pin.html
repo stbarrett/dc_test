@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}Pin: {{ item.title|striptags }}{% endblock %}
+{% load thumbnail %}
+{% load format %}
+{% load items %}
+
+{% block content %}
+<div id="breadcrumb"> 
+	<a href="/">Home</a>&nbsp;&nbsp;&#187;&nbsp;&nbsp;<a href="/collectibles/">Collectibles</a>&nbsp;&nbsp;&#187;&nbsp;&nbsp;<a href="/collectibles/pins/">Pins</a>&nbsp;&nbsp;&#187;&nbsp;&nbsp;Pin
+</div> 
+<div class="hr-full"></div> 
+<div id="content-left"> 
+	<div id="item-image"> 
+		{% ifnotequal item|first_image "img/pins/main/" %}
+		<img src="{% thumbnail item|first_image 320x320 %}" alt="{{ item.title }}" class="rounded" /><br /> 
+		<div class="copyright">{{ item|first_image_copyright }}</div> 
+		{% else %}
+		<img src="{{ MEDIA_URL }}/img/missing_340x300.png" alt="{{ item.title }}" width="340" height="300" /><br />
+		{% endifnotequal %}
+	</div> 
+	<div class="ad_300_250 module rounded">
+		{% include "ursula/includes/ads/google_300_250.html" %}
+	</div>
+
+</div> 
+<!-- Start content-right --> 
+<div id="content-right"> 
+	<div id="item"> 
+		<h2>{{ item.title }}</h2>
+		<div id="add-box">
+			{% if has_mystuff %}
+				<div class="add-mystuff"><div class="ihave"><div class="ui-button ui-widget ui-state-disabled ui-corner-all ui-button-text-only ui-state-focus"><span class="ui-button-text">I have this</span></div></div></div>
+			{% else %}
+				<div class="add-mystuff"><a href="#">Add to My Stuff</a><div class="adding">Adding...</div></div>
+			{% endif %}
+			<div class="add-wishlist"><a href="#" style="margin-left:10px;">Add to My WishList</a></div>
+			{% include "ursula/includes/share.html" %}	
+		</div>
+		<div id="added-msg"><div class="ui-icon ui-icon-info floatLeft"></div><div class="add-msg-text">This item as been added</div></div>
+		<br class="clear" /> 
+		<div class="rounded item-content">
+		{% if item.release_date %}<div class="meta-left">Release Date:</div><div class="meta-right">{{ item.release_date|date:"F d, Y" }}</div> {% endif %}
+		{% if item.retail_price %}<div class="meta-left">Retail Price:</div><div class="meta-right">${{ item.retail_price }}</div>{% endif %} 
+		{% if item.edition_size %}<div class="meta-left">Edition Size:</div><div class="meta-right">{{ item.edition_size }}</div>{% endif %} 
+		{% if item.official_link %}<div class="meta-left">Official Link</div><div class="meta-right"><a href="{{ item.official_link }}" target="_blank">{{ item.official_link }}</a></div>{% endif %} 
+		{% if item.tag_list_set.all %}<div class="meta-left">Tags:</div><div class="meta-right">{% for tag in item.tag_list_set.all %}<a href="/collectibles/pins/?tag={{tag.tag.id}}">{{tag.tag.name}}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</div> {% endif %}
+		{% if item.location_list_set.all %}<div class="meta-left">Locations:</div><div class="meta-right">{% for location in item.location_list_set.all %}<a href="/locations/{{location.location.slug}}">{{location.location.name}}</a>{% if not forloop.last %}, {% endif %}	{% endfor %}</div> {% endif %}
+		{% if item.person_list_set.all %}<div class="meta-left">People:</div><div class="meta-right">{% for person in item.person_list_set.all %}<a href="/people/{{person.person.slug}}">{{person.person.first_name}} {{person.person.last_name}}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</div>{% endif %}
+		</div> 
+		<h3>Description</h3>
+		<div class="rounded item-content">
+			{% if item.content %}{{ item.content }}{% endif %}
+		</div>
+		{% if random_pins %}
+		<h3>Related Pins</h3> 
+		<div class="rounded item-related-pins">
+			<ul class="item-list item-list-meta item-list-half">
+			{% for random_item in random_pins %}
+				<li{% if forloop.first %} class="first"{% endif %}{% if forloop.last %} class="last"{% endif %}>
+					<div class="image rounded"><a href="/collectibles/pins/{{ random_item.slug }}">{% ifnotequal random_item|first_image "img/pins/main/" %}<img src="{% thumbnail random_item|first_image 100x100 %}" alt="{{ random_item.title }}" width="100" height="100" />{% else %}<img src="{{ MEDIA_URL }}img/missing_100x100.png" alt="{{ random_item.title }}" width="100" height="100" />{% endifnotequal %}</a></div>
+					<div class="content"><a href="/collectibles/pins/{{ random_item.slug }}">{% truncate random_item.title 40 %}</a></div>
+					<div class="meta">{{ random_item.release_date|date:"m.d.Y" }}{% if random_item.retail_price %} | ${{ random_item.retail_price }}{% endif %}</div>
+				</li>
+			{% endfor %}
+			</ul>
+		</div>
+		{% endif %}
+	</div> 
+	
+</div> 
+<!-- End content-right --> 
+			
+
+{% endblock %}

@@ -1,0 +1,32 @@
+ul#nav li a { display:block; height:24px; text-align:center; width:90px; font-weight:bold; color:#490311; text-decoration:none; padding: 11px 20px 0 20px; margin-right:10px; }
+
+ul#nav li { list-style:none; height:35px; float:left; width:1%; }
+ul#nav li.wishlists { float:right; width:150px;}
+
+.home-left { width:669px; float:left; margin-right:0px; padding-right:0px;}
+.home-container  { width:611px; float:left; margin-right:0px;}
+
+ul.item-list-home { float:left; background:#fff; padding-left:0px!important; padding-top:0px!important;}
+ul.item-list li.home { width:120px!important; }
+
+
+#item-image { margin:0!important; padding:0!important; width:300px; }
+ul.book-horizontal li { margin-left:12px; }
+ul.podcast-list li { margin-left:12px; }
+ul.podcast-list li .desc { overflow:hidden; }
+
+#blog-content  { width:615px; float:left; margin-right:10px; }
+#blog-content #blog-item { width:615px; float:left; padding:0!important; margin-bottom:-10px!important;  }
+#blog-content #blog-item .post-content { float:left; width:620px; background-color:#fff; padding-bottom:20px; padding-left:20px; padding-right:20px; padding-top:20px; }
+
+#content #content-right { width:600px; float:left; margin-left:10px!important; padding-top:5px; }
+
+
+.jcarousel-container { position: relative; width:600px; margin-left:13px;}
+.jcarousel-clip { z-index: 2; padding: 0; margin: 0; overflow: hidden; position: relative; width:600px; }
+.jcarousel-list { z-index: 1; overflow: hidden; position: relative; top: 0; left: 0; margin: 0; padding: 0; }
+.jcarousel-list li, .jcarousel-item { float: left; list-style: none; width:186px!important; margin-right:0px;}
+
+a.home-slide-right { position:absolute; left:630px; top:50px; width:30px; height:100px; background:#cfc79a; margin-left:-23px;
+					display:block; background:url('img/buttons/home-right-slider.png') top left no-repeat;
+}

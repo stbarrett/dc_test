@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% load pagination_tags %}
+
+<h2>Locations</h2>
+
+{% autopaginate location_list %}
+
+{% for location in location_list %}
+<a href="{{ location.slug }}">{{ location.name }}</a>
+<br /><br />
+
+{% endfor %}
+
+{% paginate %}
+
+{% endblock %}

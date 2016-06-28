@@ -1,0 +1,31 @@
+		<script src="http://widgets.twimg.com/j/2/widget.js"></script>
+		<script>
+		new TWTR.Widget({
+		  version: 2,
+		  type: 'profile',
+		  rpp: 6,
+		  interval: 3000,
+		  width: 320,
+		  height: 250,
+		  theme: {
+		    shell: {
+		      background: '#f2eed2',
+		      color: '#490311'
+		    },
+		    tweets: {
+		      background: '#fff',
+		      color: '#4c4c4c',
+		      links: '#490311'
+		    }
+		  },
+		  features: {
+		    scrollbar: true,
+		    loop: false,
+		    live: true,
+		    hashtags: true,
+		    timestamp: true,
+		    avatars: false,
+		    behavior: 'all'
+		  }
+		}).render().setUser('dizcollect').start();
+		</script>

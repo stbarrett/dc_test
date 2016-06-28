@@ -1,0 +1,14 @@
+		<div id="add-box">
+			{% if has_mystuff %}
+				<div class="add-mystuff"><div class="ihave"><div class="ui-button ui-widget ui-state-disabled ui-corner-all ui-button-text-only ui-state-focus"><span class="ui-button-text">I have this</span></div></div></div>
+			{% else %}
+				<div class="add-mystuff"><a href="#" style="display:none">Add to My Stuff</a><div class="adding">Adding...</div></div>
+			{% endif %}
+			{% if has_wishlist %}
+				<div class="add-wishlist"><div class="ihave"><div class="ui-button ui-widget ui-state-disabled ui-corner-all ui-button-text-only ui-state-focus"><span class="ui-button-text">In my wish list</span></div></div></div>
+			{% else %}
+				<div class="add-wishlist"><a href="#" style="margin-left:10px; display:none">Add to My Wish List</a><div class="adding">Adding...</div></div>
+			{% endif %}
+			{% include "ursula/includes/share.html" %}			
+		</div>
+		<div id="added-msg"><div class="ui-icon ui-icon-info floatLeft"></div><div class="add-msg-text">This item as been added</div></div>

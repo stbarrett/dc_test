@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head profile="http://gmpg.org/xfn/11">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>{% block title %}{% endblock %}</title>
+    <script src='/_lib/js/jquery-1.4.2.min.js' type='text/javascript'></script>
+    <script src='/_lib/js/jquery_plugins/jquery.imgareaselect_0_9_2/scripts/jquery.imgareaselect.pack.js' type='text/javascript'></script>
+    
+    <!--[if IE 6]>
+    <script src='/_lib/js/png/DD_belatedPNG_0.0.8a-min.js' type='text/javascript'></script>
+    <script>
+      DD_belatedPNG.fix('.iepng');
+    </script>
+    <style type="text/css">
+    	body { behavior:url("/_lib/js/png/csshover.htc"); }
+    </style>
+    <![endif]-->
+	
+    <link charset="UTF-8" href="/_lib/css/screen.css" media="screen" rel="stylesheet" type="text/css" />
+    <link charset="UTF-8" href="/_lib/js/jquery_plugins/jquery.imgareaselect_0_9_2/css/imgareaselect-animated.css" media="screen" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+    	body { background-color:#fff; }
+   	</style>
+</head>
+
+<body>
+	<div id="pop-content">
+	{% autoescape off %}{% block content %}{% endblock %}{% endautoescape %}
+	</div>	
+</body>
+</html>
